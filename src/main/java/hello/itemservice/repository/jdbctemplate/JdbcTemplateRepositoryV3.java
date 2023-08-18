@@ -22,6 +22,7 @@ import java.util.Optional;
 @Repository
 public class JdbcTemplateRepositoryV3 implements ItemRepository {
 
+    private final RowMapper<Item> itemRowMapper = new BeanPropertyRowMapper<>(Item.class);
     private final NamedParameterJdbcTemplate template;
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -30,7 +31,7 @@ public class JdbcTemplateRepositoryV3 implements ItemRepository {
         this.jdbcInsert = new SimpleJdbcInsert(dataSource)
                 .withTableName("item")
                 .usingGeneratedKeyColumns("id")
-//                .usingColumns("item_name", "price", "quantity")
+//                .usingColumns("item_name", "price", "quantity") // insert 할 때 필요한 컬럼 지정
                 ;
     }
 
@@ -63,7 +64,7 @@ public class JdbcTemplateRepositoryV3 implements ItemRepository {
     public Optional<Item> findById(Long id) {
         final String sql = "select * from item where id = :id";
         Map<String, Long> id1 = Map.of("id", id);
-        Item item = template.queryForObject(sql, id1, rowMapper());
+        Item item = template.queryForObject(sql, id1, itemRowMapper);
         return Optional.ofNullable(item);
     }
 
@@ -89,15 +90,11 @@ public class JdbcTemplateRepositoryV3 implements ItemRepository {
         sqlBuilder.append(whereBuilder);
 
         SqlParameterSource param = new BeanPropertySqlParameterSource(cond);
-        return template.query(sqlBuilder.toString(), param, rowMapper());
+        return template.query(sqlBuilder.toString(), param, itemRowMapper);
     }
 
     @Override
     public void clear() {
         template.update("delete from item", new EmptySqlParameterSource());
-    }
-
-    private RowMapper<Item> rowMapper() {
-        return new BeanPropertyRowMapper<>(Item.class);
     }
 }
