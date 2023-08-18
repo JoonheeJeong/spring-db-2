@@ -3,8 +3,6 @@ package hello.itemservice.domain;
 import hello.itemservice.repository.ItemRepository;
 import hello.itemservice.repository.ItemSearchCond;
 import hello.itemservice.repository.ItemUpdateDto;
-import hello.itemservice.repository.jdbctemplate.JdbcTemplateRepositoryV1;
-import hello.itemservice.repository.memory.MemoryItemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -24,12 +22,8 @@ class ItemRepositoryTest {
 
     @AfterEach
     void afterEach() {
-        if (itemRepository instanceof MemoryItemRepository) {
-            ((MemoryItemRepository) itemRepository).clearStore();
-        } else if (itemRepository instanceof JdbcTemplateRepositoryV1) {
-            ((JdbcTemplateRepositoryV1) itemRepository).deleteAll();
-        }
         log.info("itemRepository: {}, class: {}", itemRepository, itemRepository.getClass());
+        itemRepository.clear();
     }
 
     @Test
