@@ -3,6 +3,7 @@ package hello.itemservice.domain;
 import hello.itemservice.repository.ItemRepository;
 import hello.itemservice.repository.ItemSearchCond;
 import hello.itemservice.repository.ItemUpdateDto;
+import hello.itemservice.repository.jdbctemplate.JdbcTemplateRepositoryV1;
 import hello.itemservice.repository.memory.MemoryItemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -23,9 +24,10 @@ class ItemRepositoryTest {
 
     @AfterEach
     void afterEach() {
-        //MemoryItemRepository 의 경우 제한적으로 사용
         if (itemRepository instanceof MemoryItemRepository) {
             ((MemoryItemRepository) itemRepository).clearStore();
+        } else if (itemRepository instanceof JdbcTemplateRepositoryV1) {
+            ((JdbcTemplateRepositoryV1) itemRepository).deleteAll();
         }
         log.info("itemRepository: {}, class: {}", itemRepository, itemRepository.getClass());
     }
