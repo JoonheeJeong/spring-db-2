@@ -4,7 +4,6 @@ import hello.itemservice.domain.Item;
 import hello.itemservice.repository.ItemRepository;
 import hello.itemservice.repository.ItemSearchCond;
 import hello.itemservice.repository.ItemUpdateDto;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -117,8 +116,8 @@ public class JdbcTemplateRepositoryV1 implements ItemRepository {
         return jdbcTemplate.query(sqlBuilder.toString(), rowMapper(), args.toArray());
     }
 
-    @Profile("test")
-    public void deleteAll() {
+    @Override
+    public void clear() {
         jdbcTemplate.update("delete from item");
     }
 }
