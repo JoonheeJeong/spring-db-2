@@ -2,6 +2,7 @@ package hello.itemservice;
 
 import hello.itemservice.config.*;
 import hello.itemservice.repository.ItemRepository;
+import hello.itemservice.service.ItemService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -24,8 +25,8 @@ public class ItemServiceApplication {
 
 	@Bean
 	@Profile("local")
-	public TestDataInit testDataInit(ItemRepository itemRepository) {
-		return new TestDataInit(itemRepository);
+	public TestDataInit testDataInit(ItemService itemService) {
+		return new TestDataInit(itemService);
 	}
 
 //	@Profile("test")
