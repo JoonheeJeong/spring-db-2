@@ -17,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Repository
-public class JpaItemRepository implements ItemRepository {
+public class JpaItemRepositoryV1 implements ItemRepository {
 
     private final EntityManager em;
 
