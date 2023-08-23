@@ -93,10 +93,9 @@ public class JdbcTemplateRepositoryV2 implements ItemRepository {
         return template.query(sqlBuilder.toString(), param, rowMapper());
     }
 
-    @Override
-    public void clear() {
-        template.update("delete from item", new EmptySqlParameterSource());
-    }
+//    public void clear() {
+//        template.update("delete from item", new EmptySqlParameterSource());
+//    }
 
     private RowMapper<Item> rowMapper() {
         return new BeanPropertyRowMapper<>(Item.class);

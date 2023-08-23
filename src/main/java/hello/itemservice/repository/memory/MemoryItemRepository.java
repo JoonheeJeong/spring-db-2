@@ -58,7 +58,6 @@ public class MemoryItemRepository implements ItemRepository {
                 .collect(Collectors.toList());
     }
 
-    @Override
     public void clear() {
         store.clear();
     }

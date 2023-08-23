@@ -116,8 +116,7 @@ public class JdbcTemplateRepositoryV1 implements ItemRepository {
         return jdbcTemplate.query(sqlBuilder.toString(), rowMapper(), args.toArray());
     }
 
-    @Override
-    public void clear() {
-        jdbcTemplate.update("delete from item");
-    }
+//    public void clear() {
+//        jdbcTemplate.update("delete from item");
+//    }
 }
