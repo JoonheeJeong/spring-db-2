@@ -3,11 +3,16 @@ package hello.itemservice.domain;
 import hello.itemservice.repository.ItemRepository;
 import hello.itemservice.repository.ItemSearchCond;
 import hello.itemservice.repository.ItemUpdateDto;
+import hello.itemservice.repository.memory.MemoryItemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 
@@ -20,10 +25,23 @@ class ItemRepositoryTest {
     @Autowired
     private ItemRepository itemRepository;
 
+    @Autowired
+    private PlatformTransactionManager txManager;
+
+    private TransactionStatus status;
+
+    @BeforeEach
+    void beforeEach() {
+        log.info("itemRepository: {}, class: {}", itemRepository, itemRepository.getClass());
+        status = txManager.getTransaction(new DefaultTransactionDefinition());
+    }
+
     @AfterEach
     void afterEach() {
-        log.info("itemRepository: {}, class: {}", itemRepository, itemRepository.getClass());
-        itemRepository.clear();
+        if (itemRepository instanceof MemoryItemRepository) {
+            ((MemoryItemRepository) itemRepository).clear();
+        }
+        txManager.rollback(status);
     }
 
     @Test
