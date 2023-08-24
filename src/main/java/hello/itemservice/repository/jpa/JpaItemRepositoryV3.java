@@ -2,6 +2,7 @@ package hello.itemservice.repository.jpa;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryFactory;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.itemservice.domain.Item;
 import hello.itemservice.domain.QItem;
@@ -54,17 +55,30 @@ public class JpaItemRepositoryV3 implements ItemRepository {
         String itemName = cond.getItemName();
         Integer maxPrice = cond.getMaxPrice();
 
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        if (StringUtils.hasText(itemName)) {
-            booleanBuilder.and(item.itemName.like("%" + itemName + "%"));
-        }
-        if (maxPrice != null) {
-            booleanBuilder.and(item.price.loe(maxPrice));
-        }
-
         return query.select(item)
                 .from(item)
-                .where(booleanBuilder)
+                .where(getBooleanBuilder(itemName, maxPrice))
                 .fetch();
+    }
+
+    private static BooleanBuilder getBooleanBuilder(String itemName, Integer maxPrice) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(likeItemName(itemName));
+        booleanBuilder.and(loeMaxPrice(maxPrice));
+        return booleanBuilder;
+    }
+
+    private static BooleanExpression likeItemName(String itemName) {
+        if (StringUtils.hasText(itemName)) {
+            return item.itemName.like("%" + itemName + "%");
+        }
+        return null;
+    }
+
+    private static BooleanExpression loeMaxPrice(Integer maxPrice) {
+        if (maxPrice != null) {
+            return item.price.loe(maxPrice);
+        }
+        return null;
     }
 }
