@@ -57,7 +57,8 @@ public class JpaItemRepositoryV3 implements ItemRepository {
 
         return query.select(item)
                 .from(item)
-                .where(getBooleanBuilder(itemName, maxPrice))
+//                .where(getBooleanBuilder(itemName, maxPrice))
+                .where(likeItemName(itemName), loeMaxPrice(maxPrice))
                 .fetch();
     }
 
