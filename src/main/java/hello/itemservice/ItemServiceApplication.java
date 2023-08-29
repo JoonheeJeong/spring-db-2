@@ -1,6 +1,7 @@
 package hello.itemservice;
 
 import hello.itemservice.config.QueryDslConfig;
+import hello.itemservice.config.V2Config;
 import hello.itemservice.service.ItemService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +14,8 @@ import org.springframework.context.annotation.Profile;
 //@Import(JdbcTemplateConfig.class)
 //@Import(JpaConfig.class)
 //@Import(SpringDataJpaConfig.class)
-@Import(QueryDslConfig.class)
+//@Import(QueryDslConfig.class)
+@Import(V2Config.class)
 @SpringBootApplication(scanBasePackages = "hello.itemservice.web")
 public class ItemServiceApplication {
 
