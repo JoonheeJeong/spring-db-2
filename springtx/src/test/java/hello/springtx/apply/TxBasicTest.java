@@ -43,19 +43,15 @@ public class TxBasicTest {
     }
 
     @Slf4j
-    static class BasicService {
+    static class BasicService extends InfoPrinter {
 
         @Transactional
         public void tx() {
-            log.info("call tx");
-            boolean isActualTransactionActive = TransactionSynchronizationManager.isActualTransactionActive();
-            log.info("tx active: {}", isActualTransactionActive);
+            printInfo("tx");
         }
 
         public void nonTx() {
-            log.info("call nonTx");
-            boolean isActualTransactionActive = TransactionSynchronizationManager.isActualTransactionActive();
-            log.info("tx active: {}", isActualTransactionActive);
+            printInfo("nonTx");
         }
     }
 

@@ -2,15 +2,12 @@ package hello.springtx.apply;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @SpringBootTest
@@ -35,7 +32,7 @@ public class TxLevelTest {
 
     @Slf4j
     @Transactional(readOnly = true)
-    static class LevelService {
+    static class LevelService extends InfoPrinter {
 
         @Transactional(readOnly = false)
         public void write() {
@@ -46,10 +43,8 @@ public class TxLevelTest {
             printInfo("read");
         }
 
-        private void printInfo(String name) {
-            log.info("call {}", name);
-            boolean txActive = TransactionSynchronizationManager.isActualTransactionActive();
-            log.info("tx active: {}", txActive);
+        protected void printInfo(String name) {
+            super.printInfo(name);
             boolean txReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
             log.info("tx readOnly: {}", txReadOnly);
         }
